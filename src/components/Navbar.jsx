@@ -80,12 +80,14 @@ const Navbar = () => {
           )}
           <div>
             {userInfo ? (
-              <button
-                onClick={() => dispatch(logoutUser())}
-                className="flex-row items-center px-3 py-1 rounded-full text-white bg-blue-600 hover:bg-blue-700"
-              >
-                Logout
-              </button>
+              <div className="hidden lg:flex">
+                <button
+                  onClick={() => dispatch(logoutUser())}
+                  className="  flex-row items-center px-3 py-1 rounded-full text-white bg-blue-600 hover:bg-blue-700"
+                >
+                  Logout
+                </button>
+              </div>
             ) : (
               <Link
                 to={"/login"}
