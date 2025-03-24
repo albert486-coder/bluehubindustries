@@ -1,127 +1,90 @@
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { GrSearch } from "react-icons/gr";
-import { useSelector, useDispatch } from "react-redux";
-import { FaRegCircleUser } from "react-icons/fa6";
-import { FaShoppingCart } from "react-icons/fa";
 import logo from "../assets/blueHubLogoT.png";
-import { logoutUser } from "../redux/actions/userActions";
+import { navItems } from "../constants";
 
 const Navbar = () => {
-  const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.user);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
-  const [menuDisplay, setMenuDisplay] = useState(false);
 
   const toggleNavbar = () => {
-    setMobileDrawerOpen(!mobileDrawerOpen);
+    setMobileDrawerOpen((prev) => !prev);
   };
 
   return (
-    <nav className="sticky top-0 z-50 py-3 backdrop-blur-lg border-b border-neutral-700/80 bg-white shadow-md">
-      <div className="container px-4 mx-auto relative flex justify-between items-center">
-        <div className="flex items-center">
-          <img className="h-10 w-10 mr-2" src={logo} alt="Logo" />
-          <Link to="/" className="text-xl font-bold">Bluehub Industries</Link>
-        </div>
-        <div className="hidden lg:flex items-center w-full justify-between max-w-sm border rounded-full focus-within:shadow pl-2">
-          <input
-            type="text"
-            placeholder="Search product here..."
-            className="w-full outline-none"
-          />
-          <div className="text-lg min-w-[50px] h-8 bg-orange-500 flex items-center justify-center rounded-r-full text-white">
-            <GrSearch />
+    <nav className="sticky top-0 z-50 py-3 backdrop-blur-lg border-b border-neutral-700/80">
+      <div className="container px-4 mx-auto relative lg:text-sm">
+        <div className="flex justify-between items-center">
+          {/* Logo & Brand Name */}
+          <div className="flex items-center flex-shrink-0">
+            <Link to="/">
+              <img className="h-10 w-10 mr-2" src={logo} alt="Logo" />
+            </Link>
+            <Link to="/" className="text-xl tracking-tight font-bold">
+              Bluehub Industries
+            </Link>
           </div>
-        </div>
-        <div className="flex items-center gap-7">
-          {userInfo && (
-            <div className="relative">
-              <div
-                className="text-3xl cursor-pointer relative flex justify-center"
-                onClick={() => setMenuDisplay((prev) => !prev)}
-              >
-                {userInfo.profilePic ? (
-                  <img
-                    src={userInfo.profilePic}
-                    className="w-10 h-10 rounded-full"
-                    alt={userInfo.name}
-                  />
-                ) : (
-                  <FaRegCircleUser />
-                )}
-              </div>
-              {menuDisplay && (
-                <div className="absolute bg-white top-12 right-0 h-fit p-2 shadow-lg rounded">
-                  {userInfo.isAdmin && (
-                    <Link
-                      to="/admin-panel/dashboard"
-                      className="block hover:bg-slate-100 p-2"
-                      onClick={() => setMenuDisplay(false)}
-                    >
-                      Admin Panel
-                    </Link>
-                  )}
-                  <button
-                    onClick={() => dispatch(logoutUser())}
-                    className="block w-full text-left px-3 py-1 rounded-md text-white bg-orange-500 hover:bg-orange-700"
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-          <Link to="/cart" className="text-2xl relative">
-            <FaShoppingCart />
-            <div className="bg-orange-500 text-white w-5 h-5 rounded-full p-1 flex items-center justify-center absolute -top-2 -right-3">
-              <p className="text-sm">0</p>
-            </div>
-          </Link>
-          {!userInfo && (
+          {/* Navigation Links for Large Screens */}
+          <ul className="hidden lg:flex ml-14 space-x-12">
+            {navItems.map((item, index) => (
+              <li key={index}>
+                <Link to={item.href} className="hover:text-orange-500">
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          {/* Authentication Buttons for Large Screens */}
+          <div className="hidden lg:flex justify-center space-x-12 items-center">
             <Link
               to="/login"
-              className="px-3 py-1 rounded-md text-white bg-orange-500 hover:bg-orange-700"
+              className="py-2 px-3 border rounded-md text-gray-700 hover:bg-gray-100"
             >
-              Login
+              Sign In
             </Link>
-          )}
-          <button onClick={toggleNavbar} className="lg:hidden text-3xl">
-            {mobileDrawerOpen ? <X /> : <Menu />}
-          </button>
-        </div>
-      </div>
-      {mobileDrawerOpen && (
-        <div className="fixed right-0 z-20 bg-white w-full p-6 flex flex-col justify-center items-center lg:hidden">
-          <div className="w-full flex items-center border rounded-full focus-within:shadow pl-2 mb-4">
-            <input
-              type="text"
-              placeholder="Search product here..."
-              className="w-full outline-none"
-            />
-            <div className="text-lg min-w-[50px] h-8 bg-orange-500 flex items-center justify-center rounded-r-full text-white">
-              <GrSearch />
-            </div>
-          </div>
-          {userInfo && (
-            <button
-              onClick={() => dispatch(logoutUser())}
-              className="w-full text-center px-3 py-2 rounded-md text-white bg-orange-500 hover:bg-orange-700 mb-4"
+            <Link
+              to="/sign-up"
+              className="bg-gradient-to-r from-orange-500 to-orange-800 py-2 px-3 rounded-md text-white hover:from-orange-600 hover:to-orange-900"
             >
-              Logout
+              Create an account
+            </Link>
+          </div>
+          {/* Mobile Hamburger Menu Button */}
+          <div className="lg:hidden md:flex flex-col justify-end">
+            <button onClick={toggleNavbar} className="text-2xl">
+              {mobileDrawerOpen ? <X /> : <Menu />}
             </button>
-          )}
-          {!userInfo && (
-            <Link
-              to="/login"
-              className="w-full text-center px-3 py-2 rounded-md text-white bg-orange-500 hover:bg-orange-700"
-            >
-              Login
-            </Link>
-          )}
+          </div>
         </div>
-      )}
+        {/* Mobile Drawer */}
+        {mobileDrawerOpen && (
+          <div className="fixed right-0 z-20 bg-neutral-900 w-full p-12 flex flex-col justify-center items-center lg:hidden">
+            <ul className="mb-6">
+              {navItems.map((item, index) => (
+                <li key={index} className="py-4">
+                  <Link to={item.href} className="text-white text-lg">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="flex space-x-6">
+              <Link
+                to="/login"
+                className="py-2 px-3 border rounded-md text-white hover:bg-gray-700"
+              >
+                Sign In
+              </Link>
+              <Link
+                to="/sign-up"
+                className="py-2 px-3 rounded-md bg-gradient-to-r from-orange-500 to-orange-800 text-white hover:from-orange-600 hover:to-orange-900"
+              >
+                Create an account
+              </Link>
+            </div>
+          </div>
+        )}
+      </div>
     </nav>
   );
 };
