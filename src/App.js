@@ -22,25 +22,19 @@ const App = () => {
     <Router>
       <ToastContainer />
       <Navbar />
-      <main className="min-h-[calc(100vh-120px)] pt-16">
+      <main className="max-w-7xl mx-auto pt-20 px-6 min-h-[calc(100vh-120px)]">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/sign-up" element={<SignUpPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route
-            path="/email-verify/:token"
-            element={<EmailVerificationPage />}
-          />
+          <Route path="/email-verify/:token" element={<EmailVerificationPage />} />
           <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/admin-panel" element={<AdminPanel />}>
             <Route path="dashboard" element={<AdminDashboardPage />} />
             <Route path="admin-orders" element={<AdminOrdersPage />} />
           </Route>
-          <Route
-            path="/product-category/:category"
-            element={<ProductCategoryPage />}
-          />
+          <Route path="/product-category/:category" element={<ProductCategoryPage />} />
         </Routes>
       </main>
       <Footer />
